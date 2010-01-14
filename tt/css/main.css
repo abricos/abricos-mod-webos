@@ -35,8 +35,9 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 }
 
 #workspace {
+	position:absolute;
 	width:100%;	
-	height:100%;
+	/*height:100%;/**/
 	z-index:10;
 	top: 0;
 	left: 0;
@@ -44,7 +45,7 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	bottom: 30px;
 }
 
-.minimizedApps {
+.os_minapps {
 	bottom:0;
 	color:#000000;
 	font-size:11px;
@@ -54,8 +55,8 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	z-index:10000;
 }
 
-.minimizedAppsRight {
-	background:transparent url(../images/minapp.png) repeat-x scroll 0 0;
+.os_minapp_right {
+	background:transparent url(../images/os_minapp.png) repeat-x scroll 0 0;
 	bottom:0;
 	height:31px;
 	left:0;
@@ -64,7 +65,7 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	z-index:9999;
 }
 
-.minimizedAppsIn {
+.os_minapp_in {
 	display:inline-block;
 	height:29px;
 	overflow:hidden;
@@ -72,21 +73,30 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	white-space:nowrap;
 }
 
-.eyeWindowOnBar_On {
-	background:transparent url(../images/minappinfo.png) no-repeat scroll center top;
+.os_minapp_show {
+	background:transparent url(../images/os_minapp_show.png) no-repeat scroll center top;
 }
 
-#powered {
-	font-size:11px;
-	bottom: 10px;
-	right: 15px;
-	display: block;
-	height: auto;
-	line-height: 2;
-	position: absolute;
-	text-align: center;
-	width: auto;
-	z-index: 100;
+.os_minapp_hide {
+	background:transparent url(../images/os_minapp_hide.png) no-repeat scroll center top;
+}
+
+.os_minapp_hide, .os_minapp_show {
+	cursor:pointer;
+	display:inline-block;
+	height:21px;
+	margin-left:2px;
+	overflow:hidden;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:7px;
+	white-space:nowrap;
+	width:137px;
+}
+
+.os_minapp_container, 
+.os_minapp_label {
+	display:inline-block;
 }
 
 .desktop-label {

@@ -25,10 +25,7 @@ Component.entryPoint = function(){
 	var __selfCT = this;
 	
 	var NS = this.namespace,
-		TMG = this.template,
-		TM = TMG.get(),
-		T = TM.data,
-		TId = TM.idManager;
+		TMG = this.template;
 	
 (function(){
 
@@ -42,7 +39,6 @@ Component.entryPoint = function(){
 		}else{
 			config.parentNode = NS.Workspace.instance.container;
 		}
-		
         Panel.superclass.constructor.call(this, config);
 	};
 	Panel.STATE_NORMAL = 0;
@@ -52,9 +48,11 @@ Component.entryPoint = function(){
 	YAHOO.extend(Panel, BrickPanel, {
 		init: function(el, config){
 			Panel.superclass.init.call(this, el, config);
-			if (!config.modal){
-				NS.Workspace.instance.registerPanel(this);
+			if (config.modal){
+				return;
 			}
+			var ws = NS.Workspace.instance;
+			ws.panelManager.register(this);
 		}
 	});
 	
@@ -84,7 +82,6 @@ Component.entryPoint = function(){
 			}
 			return null;
 		};
-		
 		
 		// Автозагрузка
 		var startup = [];
@@ -123,7 +120,7 @@ Component.entryPoint = function(){
 			Workspace.instance = this;
 			this.labels = {};
 			this.container = container;
-			this.panelManager = new YAHOO.widget.OverlayManager();
+			this.panelManager = new PanelManager();
 			
 			var __self = this;
 			Brick.Permission.load(function(){
@@ -204,50 +201,151 @@ Component.entryPoint = function(){
 				lbl.setPositionLabel(x, y);
 				y += DX+LH;
 			}
-		},
-		
-		registerPanel: function(panel){
-			
-			var pnls = this._panels;
-			for (var n in pnls){
-				var pnl = pnls[n];
-				if (pnl.isClosePanel){
-					try{
-						pnl.destroy();
-					}catch(ex){
-					};
-					delete pnls[n];
-				}
-			}
-			
-			this._panels[panel.globalId] = panel;
-			
-			this.panelManager.register(panel);
 		}
 	};
 	NS.Workspace = Workspace;
+	
+	
+	var MinApp = function(owner, panel){
+		this.init(owner, panel);
+	};
+	MinApp.prototype = {
+		init: function(owner, panel){
+			this.owner = owner;
+			this.panel = panel;
+			var TM = TMG.build('minapp'), T = TM.data, TId = TM.idManager;
+			this._TM = TM; this._T = T; this._TId = TId;
+			
+			var div = document.createElement('div');
+			div.innerHTML = TM.replace('minapp', {
+				'label': panel.header.innerHTML 
+			});
+			this.element = div.childNodes[0];
+			
+			panel.focusEvent.subscribe(this.panelFocusEvent, this, true);
+		},
+		onClick: function(el){
+			var tp = this._TId['minapp'];
+			switch(el.id){
+			case tp['id']:
+			case tp['status']:
+			case tp['label']:
+				this.changeStatus();
+				return true;
+			}
+			return false;
+		},
+		changeStatus: function(){
+			var state = this.panel.cfg.getProperty('state');
+			if (state == 2){
+				this.panel.show();
+			}else{
+				var activeOverlay = this.owner.getActivePanel();
+				if (activeOverlay == this.panel){
+					this.panel.hide();
+					var lastPanel = this.owner.getActivePanel();
+					this.owner.focus(lastPanel);
+					this.owner.setActivePanel(lastPanel);
+					return;
+				}
+			}
+			this.owner.focus(this.panel);
+		},
+		destroy: function(){
+			this.panel.focusEvent.unsubscribe(this.panelFocusEvent);
+			this.panel = null;
+			this.owner = null;
+		},
+		panelFocusEvent: function(){
+			this.owner.setActivePanel(this.panel);
+		},
+		setMinAppStatus: function(isActive){
+			var el = this._TM.getEl('minapp.status');
+			var oldClass = !isActive ? 'os_minapp_show' : 'os_minapp_hide';
+			var newClass = isActive ? 'os_minapp_show' : 'os_minapp_hide';
+			Dom.replaceClass(el, oldClass, newClass);
+		}
+	};
+	
+	var PanelManager = function (){
+		PanelManager.superclass.constructor.call(this);
+	};
+	YAHOO.extend(PanelManager, YAHOO.widget.OverlayManager, {
+		init: function(userConfig){
+			PanelManager.superclass.init.call(this, userConfig);
+
+			var container = Dom.get('os_minapp_in'); 
+
+			var __self = this;
+			E.on(container, 'click', function(e){
+				var el = E.getTarget(e);
+				if (__self.onClick(el)){ E.preventDefault(e); }
+			});
+			this._minAppContainer = container;
+		},
+		register: function (overlay){
+			PanelManager.superclass.register.call(this, overlay);
+			
+			var minApp = new MinApp(this, overlay);
+			this._minAppContainer.appendChild(minApp.element);
+
+            overlay.cfg.addProperty('minApp', {value: minApp});
+            
+            overlay.closeEvent.subscribe(this._onOverlayClose, this, true);
+			this.focus(overlay);
+		},
+		_onOverlayClose: function(p_sType, p_aArgs){
+			var minApp = p_aArgs[0].cfg.getProperty('minApp');
+			this._minAppContainer.removeChild(minApp.element);
+		},
+        _onOverlayDestroy: function (p_sType, p_aArgs, overlay) {
+			overlay.closeEvent.unsubscribe(this._onOverlayClose);
+			PanelManager.superclass._onOverlayDestroy.call(this, p_sType, p_aArgs, overlay);
+		},
+		onClick: function(el){
+			var ovs = this.overlays, minApp;
+			for (var i=0;i<ovs.length;i++){
+				minApp = ovs[i].cfg.getProperty('minApp');
+				if (minApp.onClick(el)){ return true; }
+			}
+			return false;
+		},
+		setActivePanel: function(overlay){
+			var ovs = this.overlays;
+			for (var i=0;i<ovs.length;i++){
+				var ov = ovs[i];
+				ov.cfg.getProperty('minApp').setMinAppStatus(ov == overlay);
+			}			
+		},
+		getActivePanel: function(){
+			var actOverlay = this.getActive();
+			if (!L.isNull(actOverlay) && actOverlay.cfg.getProperty('state') != 2){
+				return actOverlay;
+			}
+			var ovs = this.overlays;
+			for (var i=ovs.length-1;i>=0;i--){
+				if (ovs[i].cfg.getProperty('state') != 2){
+					return ovs[i];
+				}
+			}
+			return null;
+		}
+	});
+
 })();
 
 (function(){
-	
-	var globalId = 1;
 	
 	var DesktopLabel = function(app){
 		this.initLabel(app);
 	};
 	YAHOO.extend(DesktopLabel, YAHOO.util.DD, { 
-		_TM: null,
-		_T: null,
-		_TId: null,
 		initLabel: function(app){
 		
 			this.app = app;
-		
-			var tm = TMG.get(globalId++, 'label');
-			this._T = tm.data;
-			this._TId = tm.idManager;
-			this._TM = tm;
 			
+			var TM = TMG.build('label'), T = TM.data, TId = TM.idManager;
+			this._T = T; this._TId = TId; this._TM = TM;
 		}, 
 		getId: function(){
 			return this.app.getId();
