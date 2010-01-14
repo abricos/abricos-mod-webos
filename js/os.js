@@ -120,6 +120,7 @@ Component.entryPoint = function(){
 			Workspace.instance = this;
 			this.labels = {};
 			this.container = container;
+			
 			this.panelManager = new PanelManager();
 			
 			var __self = this;
@@ -131,6 +132,7 @@ Component.entryPoint = function(){
             E.on(window, "resize", function(event){
             	__self._setWorkspaceSize();
             });
+            this._setWorkspaceSize();
 		},
 		
 		_initApplication: function(){
@@ -159,8 +161,8 @@ Component.entryPoint = function(){
 			var r = Dom.getClientRegion();
 			var el = this.container;
 			
-            Dom.setStyle(el, "width", r.width);
-            Dom.setStyle(el, "height", r.height);
+            Dom.setStyle(el, "width", (r.width)+'px');
+            Dom.setStyle(el, "height", (r.height-32)+'px');
 		},
 		
 		renderDesktopLabels: function(){
