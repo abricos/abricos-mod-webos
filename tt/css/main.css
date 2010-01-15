@@ -15,7 +15,6 @@ body, html {
 	font-family:Verdana,sans-serif,Arial,FreeSans;
 	margin:0;
 	padding:0;
-	overflow:hidden;
 }
 
 table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
@@ -33,6 +32,18 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	width:100%;	
 	height:100%;
 	overflow:hidden;
+}
+
+#os_firstloading {
+	top: 30px;
+	position:absolute;
+	width:100%;
+	text-align: center;	
+	color:#FFF;
+}
+
+#os_firstloading span{
+	display:block;
 }
 
 #workspace {
