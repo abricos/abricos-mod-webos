@@ -59,7 +59,7 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	/*/
 }
 
-.os_minapps {
+#os_minapps {
 	bottom:0;
 	color:#000000;
 	font-size:11px;
@@ -69,7 +69,7 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	z-index:100;
 }
 
-.os_minapp_right {
+#os_minapp_right {
 	background:transparent url(../images/os_minapp.png) repeat-x scroll 0 0;
 	bottom:0;
 	height:31px;
@@ -95,7 +95,8 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	background:transparent url(../images/os_minapp_hide.png) no-repeat scroll center top;
 }
 
-.os_minapp_hide, .os_minapp_show {
+.os_minapp_hide, 
+.os_minapp_show {
 	cursor:pointer;
 	display:inline-block;
 	height:21px;

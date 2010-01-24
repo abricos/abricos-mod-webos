@@ -121,8 +121,6 @@ Component.entryPoint = function(){
 			this.labels = {};
 			this.container = container;
 			
-			this.panelManager = new PanelManager();
-			
 			var __self = this;
 			Brick.Permission.load(function(){
 				__self._initApplication();
@@ -166,6 +164,12 @@ Component.entryPoint = function(){
 		},
 		
 		renderDesktopLabels: function(){
+			this.panelManager = new PanelManager();
+			
+			Dom.get('os_minapps').style.display = '';
+			Dom.get('os_minapp_right').style.display = '';
+			Dom.get('os_firstloading').style.display = 'none';
+			
 			var __self = this;
 			NS.ApplicationManager.each(function(app){
 				if (!__self.labelExist(app.getId())){
@@ -276,7 +280,7 @@ Component.entryPoint = function(){
 		init: function(userConfig){
 			PanelManager.superclass.init.call(this, userConfig);
 
-			var container = Dom.get('os_minapp_in'); 
+			var container = Dom.get('os_minapp_in');
 
 			var __self = this;
 			E.on(container, 'click', function(e){
