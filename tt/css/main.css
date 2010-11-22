@@ -1,13 +1,8 @@
-/*
-* { outline: 2px dotted red; }
-* * { outline: 2px dotted green; }
-* * * { outline: 2px dotted orange; }
-* * * * { outline: 2px dotted blue; }
-* * * * * { outline: 1px solid red; }
-* * * * * * { outline: 1px solid green; }
-* * * * * * * { outline: 1px solid orange; }
-* * * * * * * * { outline: 1px solid blue; }
-/**/
+/* YUI Reset CSS */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
+
+/* YUI Fonts CSS */
+body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea,button{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
 body, html {
 	font-size:12px;
@@ -19,6 +14,15 @@ body, html {
 
 table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	text-align: left;
+}
+a, a:link {
+	color: #6a7398;
+}
+a:hover {
+	color: #f00;
+}
+a:active, a:visited {
+	color: #6a7398;
 }
 #background {
 	text-align: left;
@@ -34,9 +38,11 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	overflow:hidden;
 }
 
+.os_firstpanel {
+	
+}
+
 #os_firstloading {
-	top: 30px;
-	position:absolute;
 	width:100%;
 	text-align: center;	
 	color:#FFF;
@@ -114,6 +120,11 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 	display:inline-block;
 }
 
+.os_minapp_label {
+	width:137px;
+	overflow:hidden;
+}
+
 .desktop-label {
 	font-size:11px;
 	cursor:pointer;
@@ -132,4 +143,47 @@ table, tr, td, div, ul, ol, li, p, h1, h2, h3, h4, h5, h6	{
 }
 
 
+#userblock {
+	color:#666666;
+	text-align: left;
+}
+#userblock form{
+	clear: both;
+}
 
+.big #userblock {
+	margin: 10px;
+	line-height: 1em;
+}
+.big #userblock .atd span {
+	display: block;
+}
+.big #userblock .autologin {
+	display: block;
+}
+.big #userblock .autologin span {
+	display: inline;
+}
+.big #userblock #chk-autologin {
+	margin: 0 5px 0 0;
+}
+.big #userblock #txt-login,
+.big #userblock #txt-password {
+	font-family:Tahoma;
+	font-size: 2em;
+	margin-bottom: 10px;
+	width:300px;
+}
+.big #userblock .btn-authorize {
+	font-size: 1.5em;
+	padding: 0 6px;
+	display: block;
+	margin-top: 5px;
+}
+.big #userblock ul li {
+	float:left;
+}
+.big #userblock .register ,
+.big #userblock .recpwd {
+	padding: 10px 10px 0 0;
+}

@@ -11,7 +11,6 @@
  */
 
 $mod = new CMSModWebos();
-
 CMSRegistry::$instance->modules->Register($mod);
 
 class CMSModWebos extends CMSModule {
@@ -35,21 +34,22 @@ class CMSModWebos extends CMSModule {
 	 * 
 	 * @return boolean
 	 */
-	public static function IsAdmin(){
-		return CMSRegistry::$instance->session->IsAdminMode();
-	}
+//	private static function IsAdmin(){
+//		return CMSRegistry::$instance->user->IsAdminMode();
+//	}
 	
 	/**
 	 * Является ли пользователь зарегистрированным
 	 * 
 	 * @return boolean
 	 */  
-	public static function IsRegistred(){
-		return CMSRegistry::$instance->session->IsRegistred();
-	}
+//	private static function IsRegistred(){
+//		return CMSRegistry::$instance->user->IsRegistred();
+//	}
 	
 	public function GetContentName(){
-		if (!CMSModWebos::IsRegistred()){
+		
+		if (!CMSRegistry::$instance->user->IsRegistred()){
 			return "index_guest";
 		}
 		$cname = 'index';

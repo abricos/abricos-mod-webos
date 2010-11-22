@@ -14,7 +14,8 @@ Component.requires = {
 	yahoo: ['dom', 'dragdrop', 'resize'],
     mod:[
          {name: 'webos', files: ['api.js']},
-         {name: 'sys', files: ['container.js', 'permission.js']}
+         {name: 'sys', files: ['container.js']},
+         {name: 'user', files: ['permission.js']}
     ]
 };
 Component.entryPoint = function(){
@@ -63,8 +64,6 @@ Component.entryPoint = function(){
 	Brick.widget.Panel = Panel;
 })();
 
-(function(){
-	
 	var ApplicationManager = new (function(){
 		
 		var apps = [];
@@ -99,7 +98,6 @@ Component.entryPoint = function(){
 	});
 	
 	NS.ApplicationManager = ApplicationManager;
-})();
 
 (function(){
 	
@@ -161,6 +159,7 @@ Component.entryPoint = function(){
 			
             Dom.setStyle(el, "width", (r.width)+'px');
             Dom.setStyle(el, "height", (r.height-32)+'px');
+            this.orderLabelPosition();
 		},
 		
 		renderDesktopLabels: function(){
@@ -177,6 +176,18 @@ Component.entryPoint = function(){
 					__self.addLabel(label);
 				}
 			});
+			
+			// регистрация запуска по линку
+			var href = window.location.href.split('/');
+			if (href.length >= 8 && href[4] == 'start'){
+				var modname = href[5], component = href[6], fname = href[7];
+				var arg = href.length >= 9 ? href[8] : null;
+				if (Brick.componentExists(modname, component)){
+					NS.ApplicationManager.startupRegister(function(){
+						Brick.f(modname, component, fname, arg);
+					});
+				}
+			}
 			
 			// startup
 			NS.ApplicationManager.startupEach(function(startup){
@@ -201,11 +212,17 @@ Component.entryPoint = function(){
 		},
 		
 		orderLabelPosition: function(){
+			var r = Dom.getRegion(this.container);
+
 			var x = DX, y = DY;
 			for (var n in this.labels){
 				var lbl = this.labels[n];
 				lbl.setPositionLabel(x, y);
-				y += DX+LH;
+				y += DY+LH;
+				if (y+DY+LH > r.height){
+					x += DX+LW;
+					y = DY;
+				}
 			}
 		}
 	};
@@ -222,9 +239,13 @@ Component.entryPoint = function(){
 			var TM = TMG.build('minapp'), T = TM.data, TId = TM.idManager;
 			this._TM = TM; this._T = T; this._TId = TId;
 			
-			var div = document.createElement('div');
+			var div = document.createElement('div'),
+				title = panel.header.innerHTML,
+				titleMin = title;
+			
 			div.innerHTML = TM.replace('minapp', {
-				'label': panel.header.innerHTML 
+				'label': title,
+				'labelmin': titleMin 
 			});
 			this.element = div.childNodes[0];
 			
@@ -339,8 +360,6 @@ Component.entryPoint = function(){
 	});
 
 })();
-
-(function(){
 	
 	var DesktopLabel = function(app){
 		this.initLabel(app);
@@ -421,10 +440,7 @@ Component.entryPoint = function(){
 	});
 	
 	NS.DesktopLabel = DesktopLabel; 
-})();
 
-(function(){
-	
 	/**
 	 * Приложение WebOS.
 	 * 
@@ -554,11 +570,4 @@ Component.entryPoint = function(){
 	
 	NS.Application = Application;
 	
-})();
-
-(function(){
-	
-	
-})();
-
 };
