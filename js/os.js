@@ -570,4 +570,9 @@ Component.entryPoint = function(){
 	
 	NS.Application = Application;
 	
+	NS.API.showWebosPage = function(){
+		Brick.Page.reload('/webos/');
+	};
+
+	
 };
