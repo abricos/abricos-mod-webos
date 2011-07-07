@@ -10,9 +10,6 @@
  * @author Alexander Kuzmin (roosit@abricos.org)
  */
 
-$mod = new CMSModWebos();
-CMSRegistry::$instance->modules->Register($mod);
-
 class CMSModWebos extends CMSModule {
 	
 	/**
@@ -61,7 +58,9 @@ class CMSModWebos extends CMSModule {
 		
 		return $cname;
 	}
-
 }
+
+$mod = new CMSModWebos();
+CMSRegistry::$instance->modules->Register($mod);
 
 ?>
