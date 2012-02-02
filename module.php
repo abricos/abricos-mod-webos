@@ -10,14 +10,14 @@
  * @author Alexander Kuzmin (roosit@abricos.org)
  */
 
-class CMSModWebos extends CMSModule {
+class CMSModWebos extends Ab_Module {
 	
 	/**
 	 * Конструктор
 	 */
 	public function __construct(){
 		// Версия модуля
-		$this->version = "0.1dev";
+		$this->version = "0.1.2";
 		
 		// Название модуля
 		$this->name = "webos";
@@ -26,27 +26,9 @@ class CMSModWebos extends CMSModule {
 		$this->takelink = "webos";
 	}
 
-	/**
-	 * Является ли пользователь Администратором
-	 * 
-	 * @return boolean
-	 */
-//	private static function IsAdmin(){
-//		return CMSRegistry::$instance->user->IsAdminMode();
-//	}
-	
-	/**
-	 * Является ли пользователь зарегистрированным
-	 * 
-	 * @return boolean
-	 */  
-//	private static function IsRegistred(){
-//		return CMSRegistry::$instance->user->IsRegistred();
-//	}
-	
 	public function GetContentName(){
 		
-		if (!CMSRegistry::$instance->user->IsRegistred()){
+		if (Abricos::$user->id == 0){
 			return "index_guest";
 		}
 		$cname = 'index';
@@ -60,7 +42,6 @@ class CMSModWebos extends CMSModule {
 	}
 }
 
-$mod = new CMSModWebos();
-CMSRegistry::$instance->modules->Register($mod);
+Abricos::ModuleRegister(new CMSModWebos());
 
 ?>
