@@ -1,5 +1,5 @@
-Brick.util.Language.add('ru',{'mod': {'webos':{
-	'app':{
-		'title': 'Web OS' 
+Brick.util.Language.add('ru',{'mod': {'{C#MODNAME}':{
+	'app': {
+		'title': 'Web OS'
 	}
 }}});
